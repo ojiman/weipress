@@ -34,7 +34,7 @@ Claude Code: work top-to-bottom, one phase at a time. Do not skip ahead.
 
 > Tell Claude Code: "Implement TASKS.md Phase 1"
 
-- [ ] **P1-1** Create root `package.json` with npm workspaces
+- [x] **P1-1** Create root `package.json` with npm workspaces
   ```json
   {
     "name": "weipress",
@@ -43,21 +43,21 @@ Claude Code: work top-to-bottom, one phase at a time. Do not skip ahead.
   }
   ```
 
-- [ ] **P1-2** Create root `.gitignore`
+- [x] **P1-2** Create root `.gitignore`
   - Include: `node_modules/`, `.env`, `dist/`, `.next/`
 
-- [ ] **P1-3** Scaffold each component directory with `package.json`
+- [x] **P1-3** Scaffold each component directory with `package.json`
   - `server/package.json`
   - `client-human/package.json`
   - `client-agent/package.json`
   - Each must include `"type": "module"`
 
-- [ ] **P1-4** Add `tsconfig.json` to each component
+- [x] **P1-4** Add `tsconfig.json` to each component
   - `strict: true`
   - `target: ES2022`
   - `moduleResolution: node16` (server, agent) or `bundler` (client-human)
 
-- [ ] **P1-5** Create `.env.example` in each component
+- [x] **P1-5** Create `.env.example` in each component
   - Follow the templates in CLAUDE.md
 
 ---
