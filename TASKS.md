@@ -66,19 +66,19 @@ Claude Code: work top-to-bottom, one phase at a time. Do not skip ahead.
 
 > Tell Claude Code: "Implement TASKS.md Phase 2. Follow api-spec.md exactly for all response shapes."
 
-- [ ] **P2-1** `server/src/content/articles.ts` — dummy article data
+- [x] **P2-1** `server/src/content/articles.ts` — dummy article data
   - Article ID: `boj-2026`  (fictional BoJ policy analysis)
   - Section 0: free lead (~300 words of dummy Japanese-style financial text)
   - Sections 1–3: standard paid sections (~400–600 words each)
   - Section 4: premium paid section (~500 words)
   - Define types: `Article`, `Section`, `SectionTier` — no `any`
 
-- [ ] **P2-2** `server/src/config/x402.ts` — payment config
+- [x] **P2-2** `server/src/config/x402.ts` — payment config
   - Read `RECEIVER_ADDRESS`, `NETWORK`, `USDC_ADDRESS` from env
   - Export a `sectionPricing` map keyed by section ID
   - Use the price table in api-spec.md
 
-- [ ] **P2-3** `server/src/routes/articles.ts` — route handlers
+- [x] **P2-3** `server/src/routes/articles.ts` — route handlers
   - `GET /article/:articleId/section/:sectionId`
   - Section 0: return content directly (no payment middleware)
   - Sections 1–4: wrap with `paymentMiddleware` from `@x402/express`
@@ -86,19 +86,19 @@ Claude Code: work top-to-bottom, one phase at a time. Do not skip ahead.
   - `GET /articles` — return article listing (free, no payment)
   - `GET /health` — return server status
 
-- [ ] **P2-4** `server/src/index.ts` — Express app entry point
+- [x] **P2-4** `server/src/index.ts` — Express app entry point
   - Port from `process.env.PORT` (default: 3001)
   - CORS: allow `http://localhost:3000` (client-human)
   - Mount routes from P2-3
   - Add a global error handler (log + return 500 JSON)
 
-- [ ] **P2-5** Add npm scripts to `server/package.json`
+- [x] **P2-5** Add npm scripts to `server/package.json`
   - `"dev": "tsx watch src/index.ts"`
   - `"build": "tsc"`
   - `"start": "node dist/index.js"`
   - `"test": "node --test src/**/*.test.ts"` (or Jest)
 
-- [ ] **P2-6** Smoke test — both of these must pass before moving to Phase 3
+- [x] **P2-6** Smoke test — both of these must pass before moving to Phase 3
   ```bash
   # Free section → 200 OK
   curl -i http://localhost:3001/article/boj-2026/section/0
