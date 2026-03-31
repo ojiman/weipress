@@ -1,0 +1,5 @@
+{
+  "name": "weipress",
+  "private": true,
+  "workspaces": ["server", "client-human", "client-agent"]
+}
