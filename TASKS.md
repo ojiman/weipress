@@ -9,22 +9,22 @@ Claude Code: work top-to-bottom, one phase at a time. Do not skip ahead.
 
 > These steps are for Norio to complete manually — not Claude Code.
 
-- [ ] **P0-1** Create GitHub repository
+- [x] **P0-1** Create GitHub repository
   - Name: `weipress`
   - `.gitignore`: use the Node template
   - Initialize with a `README.md`
 
-- [ ] **P0-2** Get Base Sepolia USDC from faucet
+- [x] **P0-2** Get Base Sepolia USDC from faucet
   - Circle faucet (easiest): https://faucet.circle.com
   - Add Base Sepolia network to MetaMask (Chain ID: 84532, RPC: https://sepolia.base.org)
   - Target: at least 1 USDC for testing
 
-- [ ] **P0-3** Create a dedicated agent test wallet
+- [x] **P0-3** Create a dedicated agent test wallet
   - Add a new account in MetaMask → export the private key
   - Send some Base Sepolia USDC to this wallet from P0-2
   - ⚠️ This private key goes in `client-agent/.env` only — never commit it
 
-- [ ] **P0-4** Verify CDP Facilitator access
+- [x] **P0-4** Verify CDP Facilitator access
   - Open https://x402.org/facilitator — no auth required for testnet
   - Optionally create a CDP account at https://portal.cdp.coinbase.com (free tier is enough)
 
