@@ -111,6 +111,32 @@ curl -i http://localhost:3001/article/boj-2026/section/1
 
 ---
 
+## Task Management
+
+Read TASKS.md at the start of every session. Update it inline — never append-only.
+
+### Section structure
+
+| Section | Purpose |
+|---|---|
+| `## In Progress` | Tasks currently being worked on |
+| `## Next` | 1–3 tasks to pick up immediately after In Progress |
+| `## Backlog` | Future work, not yet scheduled |
+| `## Discovered` | Tasks that surfaced unexpectedly during implementation |
+| `## Blocked` | Tasks waiting on an external dependency |
+| `## Done` | Completed tasks — **never delete**, they are decision history |
+
+### Update rules
+
+- When starting a task: move it to `## In Progress`
+- When completing a task: mark `[x]` and move to `## Done` with a one-line note if a decision was made
+- When discovering an unexpected task: add it to `## Discovered` with reason and priority
+- When a task is deferred: move to `## Backlog` and note why
+- When changing an approach mid-task: record the change inline, e.g.:
+  `~~Use ethers.js~~ → Changed to viem (lighter, better TypeScript support)`
+
+---
+
 ## Coding Rules
 
 - **No `any`** — use `unknown` with type guards when the type is uncertain
