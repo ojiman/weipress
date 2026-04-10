@@ -3,7 +3,7 @@ import "dotenv/config";
 const receiverAddress = process.env.RECEIVER_ADDRESS ?? "";
 const network = process.env.NETWORK ?? "eip155:84532";
 const usdcAddress =
-  process.env.USDC_ADDRESS ?? "0x036CbD53842c5426634e7929541eC2318f3dCF4";
+  process.env.USDC_ADDRESS ?? "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
 const facilitatorUrl =
   process.env.FACILITATOR_URL ?? "https://x402.org/facilitator";
 
