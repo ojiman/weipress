@@ -13,34 +13,6 @@
 
 ## Next
 
-- [ ] **P3-1** `client-agent/src/wallet.ts` — Viem wallet setup
-  - Load `AGENT_PRIVATE_KEY` from env → `privateKeyToAccount`
-  - Create `walletClient` (Base Sepolia, RPC_URL)
-  - Create `publicClient` (for USDC balance reads)
-  - On startup: log wallet address and USDC balance
-
-- [ ] **P3-2** `client-agent/src/agent.ts` — main payment script
-  - Use `wrapFetchWithX402` from `@x402/fetch` for automatic x402 handling
-  - Fetch sections 1, 2, 3 of `boj-2026` sequentially
-  - After each section: log tx hash and amount paid
-  - Print summary box at end (sections read + total USDC paid)
-  - Expected output format:
-    ```
-    [weipress-agent] Wallet: 0x...  Balance: 0.xx USDC
-    [weipress-agent] Fetching section 1...
-      → 402 received  price: 0.05 USDC
-      → Signing EIP-3009 authorization...
-      → Payment submitted  tx: 0x...  ✅
-      → Content received (NNN words)
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      Sections fetched : 3
-      Total paid       : 0.20 USDC
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    ```
-
-- [ ] **P3-3** Add npm script to `client-agent/package.json`
-  - `"agent": "tsx src/agent.ts"` (already in package.json — verify only)
-
 - [ ] **P3-4** Run and verify
   - Requires `server/.env` with real `RECEIVER_ADDRESS` and `client-agent/.env` with real `AGENT_PRIVATE_KEY`
   - Confirm: 3 sections fetched, tx hashes logged, summary printed
@@ -120,6 +92,19 @@
 - [x] **P1-3** `package.json` (`"type": "module"`) for each component
 - [x] **P1-4** `tsconfig.json` (strict, ES2022; `node16` for server/agent, `bundler` for client-human)
 - [x] **P1-5** `.env.example` for server and client-agent
+
+### Phase 3: client-agent
+
+- [x] **P3-1** `client-agent/src/wallet.ts` — viem wallet + `toClientEvmSigner`
+  - `privateKeyToAccount` → walletClient / publicClient / evmSigner
+  - Adapts viem signTypedData to `ClientEvmSigner` interface (`@x402/evm`)
+  - `logWalletInfo()` reads USDC balance via ERC-20 balanceOf
+- [x] **P3-2** `client-agent/src/agent.ts` — main payment script
+  - Uses `wrapFetchWithPayment` + `x402Client` (actual API, not `wrapFetchWithX402`)
+  - `onBeforePaymentCreation` hook logs 402 price + "Signing EIP-3009"
+  - Parses `PAYMENT-RESPONSE` / `X-PAYMENT-RESPONSE` header for tx hash
+  - Fetches sections 1, 2, 3 sequentially; prints summary
+- [x] **P3-3** npm script `"agent": "tsx src/agent.ts"` — confirmed present
 
 ### Phase 2: Server (core x402 flow)
 
