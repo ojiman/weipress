@@ -4,7 +4,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { baseSepolia } from "viem/chains";
 import { toClientEvmSigner, type ClientEvmSigner } from "@x402/evm";
 
-const USDC_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF4" as const;
+const USDC_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e" as const;
 
 const USDC_ABI = [
   {

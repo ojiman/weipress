@@ -13,9 +13,11 @@
 
 ## Next
 
-- [ ] **P3-4** Run and verify
-  - Requires `server/.env` with real `RECEIVER_ADDRESS` and `client-agent/.env` with real `AGENT_PRIVATE_KEY`
-  - Confirm: 3 sections fetched, tx hashes logged, summary printed
+- [ ] **P3-4** Run and verify — section 1 OK, sections 2–3 failing
+  - Section 1: payment succeeded, content received (327 words) ✅
+  - Sections 2–3: payment header sent but server returns 402 `{}` (empty body)
+  - Hypothesis: CDP Facilitator rate limiting or EIP-3009 nonce issue on sequential payments
+  - Next step: check server logs for facilitator error detail
 
 ---
 
