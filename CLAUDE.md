@@ -4,6 +4,27 @@ This file is auto-loaded by Claude Code. Read it fully before writing any code.
 
 ---
 
+## Agent Roles
+
+This project uses two Claude Code sessions with distinct responsibilities.
+
+### Session A — Development Agent
+- Implements code, runs tests, performs git operations
+- Has write access to all files
+- Updates TASKS.md as work progresses
+
+### Session B — Strategy Agent
+- Reads CLAUDE.md and TASKS.md to maintain a full picture of the project
+- Advises on what to work on next, identifies risks, raises questions
+- **Does not edit files** (launched with `--allowedTools "Read,Glob,Grep,WebFetch,WebSearch"`)
+- TASKS.md is the source of truth for current status
+
+### Language Convention
+- **Conversation**: Japanese
+- **Code, comments, commit messages, markdown files**: English
+
+---
+
 ## Project Overview
 
 **weipress** is a personal PoC exploring the **x402 protocol (HTTP 402 Payment Required)**
@@ -178,6 +199,6 @@ Read TASKS.md at the start of every session. Update it inline — never append-o
 
 - x402 GitHub: https://github.com/coinbase/x402
 - Express example: https://github.com/coinbase/x402/tree/main/examples/typescript/servers/express
-- Base Sepolia USDC: `0x036CbD53842c5426634e7929541eC2318f3dCF4`
+- Base Sepolia USDC: `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
 - CDP Facilitator: `https://x402.org/facilitator`
 - Base Sepolia RPC: `https://sepolia.base.org`
