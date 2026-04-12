@@ -213,7 +213,7 @@ Article: "BoJ Policy 2026 — Scenarios and Asset Allocation"
 │                        Blockchain                                │
 │                                                                  │
 │  Base Sepolia  (chain ID: 84532)                                 │
-│  USDC: 0x036CbD53842c5426634e7929541eC2318f3dCF4               │
+│  USDC: 0x036CbD53842c5426634e7929541eC2318f3dCF7e               │
 │                                                                  │
 │  Settlement recorded on-chain. Auditable by anyone.             │
 └─────────────────────────────────────────────────────────────────┘
@@ -577,7 +577,7 @@ Phase 3 (Extend)— 2027        If the ecosystem matures
 
 **Testnet Resources**
 - [Base Sepolia USDC faucet (Circle)](https://faucet.circle.com)
-- [USDC contract on Base Sepolia](https://sepolia.basescan.org/token/0x036CbD53842c5426634e7929541eC2318f3dCF4)
+- [USDC contract on Base Sepolia](https://sepolia.basescan.org/token/0x036CbD53842c5426634e7929541eC2318f3dCF7e)
 - [Base Sepolia RPC](https://sepolia.base.org)
 
 **Industry Context**
