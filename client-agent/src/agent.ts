@@ -1,8 +1,8 @@
 import "dotenv/config";
-import { formatUnits } from "viem";
+import { formatUnits, type Hash } from "viem";
 import { wrapFetchWithPayment, x402Client, decodePaymentResponseHeader } from "@x402/fetch";
 import { ExactEvmScheme } from "@x402/evm";
-import { evmSigner, logWalletInfo } from "./wallet.js";
+import { evmSigner, logWalletInfo, publicClient } from "./wallet.js";
 
 const SERVER_URL = process.env["SERVER_URL"] ?? "http://localhost:3001";
 const ARTICLE_ID = "boj-2026";
@@ -74,6 +74,7 @@ async function main(): Promise<void> {
     if (!response.ok) {
       const body: unknown = await response.json().catch(() => ({}));
       console.error(`  ✗ Unexpected status ${response.status}:`, body);
+      console.error(`  ✗ Response headers:`, Object.fromEntries(response.headers.entries()));
       continue;
     }
 
@@ -82,6 +83,19 @@ async function main(): Promise<void> {
     const txHash = parseTxHash(response);
     if (txHash) {
       console.log(`  → Payment submitted  tx: ${txHash}  ✅`);
+      // Wait for on-chain confirmation before the next payment:
+      // settlement is async — server returns 200 before the tx is mined.
+      // Without this guard, the CDP facilitator simulation for the next section
+      // runs against pre-settlement chain state and returns invalid_exact_evm_transaction_failed.
+      console.log(`  → Waiting for on-chain confirmation...`);
+      await publicClient.waitForTransactionReceipt({ hash: txHash as Hash });
+      console.log(`  → Confirmed ✅`);
+      // Wait for CDP Facilitator's RPC node to catch up after on-chain confirmation.
+      // Root cause: waitForTransactionReceipt confirms via the agent's own RPC, but the
+      // CDP Facilitator uses a separate RPC node that lags by ~5-10s on Base Sepolia.
+      // Without this delay, the facilitator's pre-submission simulation sees stale state
+      // and returns invalid_exact_evm_transaction_failed with transaction: "".
+      await new Promise(r => setTimeout(r, 10000));
     } else {
       console.log(`  → Payment submitted  ✅  (tx hash not available)`);
     }

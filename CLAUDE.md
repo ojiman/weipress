@@ -161,7 +161,26 @@ Read TASKS.md at the start of every session. Update it inline — never append-o
 6. CDP     → verification OK
 7. Server  → POST /settle to CDP (async is fine)
 8. Server  → 200 OK + content + X-PAYMENT-RESPONSE header
+             (base64 JSON: { success, transaction, errorReason, payer, network })
 ```
+
+---
+
+## x402 Known Gotchas
+
+**Settlement is async from the client.** `fetchWithPayment()` / `wrapFetchWithPayment` resolves at HTTP 200, not at on-chain confirmation. The `transferWithAuthorization` tx may still be pending when your code continues. Do not treat 200 OK as "settled on-chain".
+
+**Sequential payments from the same wallet require two guards.**
+The CDP Facilitator uses its own RPC node, which lags behind the agent's RPC by ~5–10s on Base Sepolia.
+Even after `waitForTransactionReceipt` confirms locally, the facilitator's pre-submission simulation can still see stale chain state and return `invalid_exact_evm_transaction_failed` with `transaction: ""` (empty = never broadcast).
+
+Fix applied in `client-agent/src/agent.ts`:
+1. `await publicClient.waitForTransactionReceipt({ hash: txHash })` — wait for local RPC confirmation
+2. `await new Promise(r => setTimeout(r, 10000))` — additional 10s for facilitator RPC propagation
+
+(Applies to `client-agent` sequential loop. Browser UI must handle this differently — do not block the UI thread.)
+
+**Diagnosing 402 failures.** The `payment-response` response header is present even on failed 402s. Decode it (base64 → JSON) to get `errorReason` and `transaction`. An empty `transaction: ""` means the facilitator rejected the payment before broadcasting — check `errorReason` first.
 
 ---
 
