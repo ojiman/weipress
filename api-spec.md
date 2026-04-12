@@ -83,7 +83,7 @@ Content-Type: application/json
 {
   "scheme": "exact",
   "network": "eip155:84532",
-  "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF4",
+  "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
   "price": "50000",
   "payTo": "0x<RECEIVER_ADDRESS>",
   "maxTimeoutSeconds": 300,
@@ -277,7 +277,7 @@ const domain = {
   name:            "USD Coin",
   version:         "2",
   chainId:         84532,
-  verifyingContract: "0x036CbD53842c5426634e7929541eC2318f3dCF4",
+  verifyingContract: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
 };
 
 const types = {
