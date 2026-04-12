@@ -13,11 +13,10 @@
 
 ## Next
 
-- [ ] **P3-4** Run and verify — section 1 OK, sections 2–3 failing
-  - Section 1: payment succeeded, content received (327 words) ✅
-  - Sections 2–3: payment header sent but server returns 402 `{}` (empty body)
-  - Hypothesis: CDP Facilitator rate limiting or EIP-3009 nonce issue on sequential payments
-  - Next step: check server logs for facilitator error detail
+- [x] **P3-4** Run and verify — all 3 sections succeed ✅
+  - Root cause: CDP Facilitator RPC lags ~5–10s behind agent's RPC on Base Sepolia
+  - Fix: `waitForTransactionReceipt` + 10s sleep between sections in `agent.ts`
+  - Confirmed: sections 1/2/3 all paid and content received (327/405/500 words)
 
 ---
 
