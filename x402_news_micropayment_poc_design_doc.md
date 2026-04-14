@@ -3,7 +3,7 @@
 
 **Status:** Draft v0.4
 **Created:** 2026-03-29
-**Author:** Norio (personal project / tech exploration)
+**Author:** ojiman (personal project / tech exploration)
 **Audience:** Self-reference, technical peers
 
 ---
