@@ -7,7 +7,15 @@ const app = express();
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 
 // Middleware
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    // Expose x402 custom headers so browser fetch() can read them:
+    // PAYMENT-REQUIRED: 402 challenge header (payment requirements)
+    // PAYMENT-RESPONSE: 200 settlement confirmation header (tx hash)
+    exposedHeaders: ["PAYMENT-REQUIRED", "PAYMENT-RESPONSE"],
+  }),
+);
 app.use(express.json());
 
 // Log 402 responses — distinguish initial challenge (no X-PAYMENT) from settlement failure (X-PAYMENT present)
