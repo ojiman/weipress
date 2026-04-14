@@ -80,7 +80,13 @@ AGENT_PRIVATE_KEY=0x<test-only wallet private key>
 RPC_URL=https://sepolia.base.org
 ```
 
-> ⚠️ Always add `.env` to `.gitignore`. Never commit private keys.
+### client-human/.env.local
+```
+NEXT_PUBLIC_SERVER_URL=http://localhost:3001
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=<get from https://cloud.walletconnect.com>
+```
+
+> ⚠️ Always add `.env` and `.env.local` to `.gitignore`. Never commit private keys.
 
 ---
 
@@ -181,6 +187,30 @@ Fix applied in `client-agent/src/agent.ts`:
 (Applies to `client-agent` sequential loop. Browser UI must handle this differently — do not block the UI thread.)
 
 **Diagnosing 402 failures.** The `payment-response` response header is present even on failed 402s. Decode it (base64 → JSON) to get `errorReason` and `transaction`. An empty `transaction: ""` means the facilitator rejected the payment before broadcasting — check `errorReason` first.
+
+**Browser CORS: must expose x402 headers explicitly.** The browser's `fetch` silently hides non-safelisted response headers from JavaScript under CORS. `PAYMENT-REQUIRED` (402 challenge) and `PAYMENT-RESPONSE` (200 settlement) are not in the CORS safelist. Without `exposedHeaders`, `response.headers.get("PAYMENT-REQUIRED")` returns `null` in the browser — causing `"Failed to parse payment requirements: Invalid payment required response"`. Node.js fetch (client-agent) is NOT subject to this restriction, so the same code works there without any fix.
+
+Required in `server/src/index.ts`:
+```ts
+app.use(cors({
+  origin: "http://localhost:3000",
+  exposedHeaders: ["PAYMENT-REQUIRED", "PAYMENT-RESPONSE"],
+}));
+```
+
+Note: `@x402/fetch` contains an attempted self-fix for this that does not work. Always add `exposedHeaders` manually on the server for any browser-facing x402 integration.
+
+**RainbowKit v2: use `getDefaultConfig`, not raw `createConfig`.** When using wagmi's `createConfig` directly, RainbowKit's `ConnectButton` does not discover installed wallets like MetaMask. Use `getDefaultConfig` from `@rainbow-me/rainbowkit` instead. A WalletConnect Project ID is required (free tier at https://cloud.walletconnect.com). Store it as `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` in `.env.local`.
+
+```ts
+import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+export const wagmiConfig = getDefaultConfig({
+  appName: "weipress",
+  projectId: process.env["NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID"] ?? "",
+  chains: [baseSepolia],
+  ssr: true,
+});
+```
 
 ---
 

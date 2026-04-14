@@ -13,41 +13,14 @@
 
 ## Next
 
-- [x] **P3-4** Run and verify — all 3 sections succeed ✅
-  - Root cause: CDP Facilitator RPC lags ~5–10s behind agent's RPC on Base Sepolia
-  - Fix: `waitForTransactionReceipt` + 10s sleep between sections in `agent.ts`
-  - Confirmed: sections 1/2/3 all paid and content received (327/405/500 words)
+- [ ] **P4-5** Manual verification — browser UI end-to-end
+  - Open http://localhost:3000 → connect MetaMask (Base Sepolia)
+  - Click "Read" → MetaMask signs → content appears with tx badge
+  - Prerequisite: `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` set in `client-human/.env.local`
 
 ---
 
 ## Backlog
-
-### Phase 4: Browser UI
-> Assume Phase 2 server is running on localhost:3001.
-
-- [ ] **P4-1** Initialize Next.js app in `client-human/`
-  - TypeScript + Tailwind CSS + App Router
-  - Add `wagmi` v2 and `@rainbow-me/rainbowkit` for wallet connection
-
-- [ ] **P4-2** `client-human/src/app/layout.tsx` — Web3 providers
-  - Wrap with `WagmiProvider` and `RainbowKitProvider`
-  - Configure Base Sepolia chain
-
-- [ ] **P4-3** `client-human/src/components/ArticleSection.tsx`
-  - Props: `articleId`, `sectionId`, `price` (display string)
-  - Locked state: price label + "Read" button
-  - On click: `wrapFetchWithX402(fetch, walletClient)` to pay and fetch
-  - Unlocked state: content + `Paid ✅  tx: 0x...` badge
-  - Loading state: spinner + "Processing payment..."
-
-- [ ] **P4-4** `client-human/src/app/page.tsx` — article page
-  - Fetch section 0 on load (free)
-  - Render sections 1–4 as `<ArticleSection>` components
-  - Top-right: `<ConnectButton>` from RainbowKit
-
-- [ ] **P4-5** Manual verification
-  - Open http://localhost:3000 → connect MetaMask (Base Sepolia)
-  - Click "Read" → MetaMask signs → content appears with tx badge
 
 ### Phase 5: Polish for demo
 
@@ -106,6 +79,25 @@
   - Parses `PAYMENT-RESPONSE` / `X-PAYMENT-RESPONSE` header for tx hash
   - Fetches sections 1, 2, 3 sequentially; prints summary
 - [x] **P3-3** npm script `"agent": "tsx src/agent.ts"` — confirmed present
+
+### Phase 4: Browser UI
+
+- [x] **P4-1** Initialize Next.js app in `client-human/`
+  - Tailwind CSS, App Router, wagmi v2, RainbowKit v2, @x402/fetch, @x402/evm
+  - `getDefaultConfig` from RainbowKit required (not raw `createConfig`) for MetaMask discovery
+- [x] **P4-2** `client-human/src/app/layout.tsx` + `providers.tsx` — Web3 providers
+  - Split into Server Component (layout) + Client Component (providers)
+  - WagmiProvider + QueryClientProvider + RainbowKitProvider
+- [x] **P4-3** `client-human/src/components/ArticleSection.tsx`
+  - Discriminated union state: locked / loading / unlocked / error
+  - `buildX402Client(walletClient)` in `src/lib/x402.ts` bridges wagmi → x402
+  - No `waitForTransactionReceipt` delay needed — sections paid independently by user
+- [x] **P4-4** `client-human/src/app/page.tsx` — article page
+  - Server Component: fetches section 0 (free) server-side
+  - Renders sections 1–4 as `<ArticleSection>` client components
+- [x] **P4-fixes** Two integration bugs discovered and fixed:
+  - Browser CORS: added `exposedHeaders: ["PAYMENT-REQUIRED", "PAYMENT-RESPONSE"]` to `server/src/index.ts`
+  - RainbowKit wallet detection: switched from `createConfig` to `getDefaultConfig`; requires `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` in `client-human/.env.local`
 
 ### Phase 2: Server (core x402 flow)
 
