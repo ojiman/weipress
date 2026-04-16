@@ -34,7 +34,7 @@ What makes this worth exploring:
 
 - **Microtransactions finally work.** USDC on Base settles for fractions of a cent. A $0.05 article section is economically viable for the first time.
 - **AI agents are first-class citizens.** An LLM agent can discover, pay for, and consume content autonomously — no human in the loop, no pre-issued credentials.
-- **The standard is converging.** Coinbase shipped `@x402/express`. The blockchain infrastructure developments in Japan is moving toward on-chain settlement for traditional securities. The infrastructure layer is hardening.
+- **The standard is converging.** Coinbase shipped `@x402/express`. On-chain settlement for traditional assets is moving from "crypto curiosity" to infrastructure-layer consideration. The primitive is hardening.
 
 ### 0.2 What This PoC Explores
 
@@ -65,11 +65,9 @@ Three concrete questions:
 
 ## 1. Background
 
-### 1.1 Industry Context
+### 1.1 Context
 
-In February 2026, In early 2026, several major financial networks began exploring blockchain-based payment rails for on-chain settlement. This signals that the technology is moving from "crypto curiosity" to infrastructure-layer consideration.
-
-Independently of that institutional trajectory, x402 addresses a much simpler problem: **HTTP-native micropayments**. The two trends converge on the same underlying primitive — EVM-compatible chains + stablecoins + programmable settlement.
+Blockchain-based payment rails are moving from "crypto curiosity" to infrastructure-layer consideration. x402 addresses a much simpler problem: **HTTP-native micropayments**. The underlying primitive — EVM-compatible chains + stablecoins + programmable settlement — is the same.
 
 ### 1.2 The Problem x402 Solves
 
@@ -101,7 +99,7 @@ x402 opens the middle ground: **pay per section, pay per API call, pay per infer
 
 Financial analysis is a natural fit for micropayments: readers often want one specific article (a central bank decision, an earnings preview), not a full subscription. The content also has clear tiers — a free lead, a standard analysis section, a premium economist take.
 
-This PoC uses a **fictional wealth management news portal** ("WealthStyle News") as the content layer. The articles are entirely fabricated. The portal is not affiliated with any real publisher or organization.
+This PoC uses a **fictional news portal** ("WealthStyle News") as the content layer. The articles are entirely fabricated. The portal is not affiliated with any real publisher.
 
 ### 2.2 Demo Article Structure
 
@@ -543,7 +541,7 @@ $ npm run agent
 
 | # | Question | Notes |
 |---|---|---|
-| P-1 | Regional stablecoin as future asset | If institutional stablecoins emerge, swapping `asset` from USDC is a config change, not a rewrite. |
+| P-1 | Alternative stablecoin as asset | Swapping `asset` from USDC to another stablecoin is a config change, not a rewrite. |
 | P-2 | x402 beyond content | Same protocol works for API endpoints, data feeds, model inference. The server middleware is identical. |
 | P-3 | `upto` scheme (variable pricing) | Not yet in stable SDK. Could enable "pay for what the agent actually reads" semantics. |
 
@@ -562,7 +560,7 @@ Phase 2 (Clean) — 2026 Q3    If worth continuing
   └── WalletConnect v2 for mobile
 
 Phase 3 (Extend)— 2027        If the ecosystem matures
-  ├── Swap USDC → institutional stablecoin when available
+  ├── Swap USDC → alternative stablecoin when available
   ├── Extend to API endpoint monetization (not just content)
   └── Explore `upto` scheme for agent metered access
 ```
@@ -580,9 +578,6 @@ Phase 3 (Extend)— 2027        If the ecosystem matures
 - [USDC contract on Base Sepolia](https://sepolia.basescan.org/token/0x036CbD53842c5426634e7929541eC2318f3dCF7e)
 - [Base Sepolia RPC](https://sepolia.base.org)
 
-**Industry Context**
-- Coinbase x402 protocol announcement
-
 ---
 
 **Document History**
@@ -590,6 +585,6 @@ Phase 3 (Extend)— 2027        If the ecosystem matures
 | Version | Date | Changes |
 |---|---|---|
 | v0.1 | 2026-03-29 | Initial draft (Japanese) |
-| v0.2 | 2026-03-29 | Added project context and roadmap |
+| v0.2 | 2026-03-29 | Added summary and use case exploration |
 | v0.3 | 2026-03-29 | Removed corporate framing; personal PoC tone |
 | v0.4 | 2026-03-29 | Full rewrite in English; project renamed weipress |

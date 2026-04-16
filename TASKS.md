@@ -13,16 +13,50 @@
 
 ## Next
 
-- [ ] **P4-5** Manual verification — browser UI end-to-end
-  - Open http://localhost:3000 → connect MetaMask (Base Sepolia)
-  - Click "Read" → MetaMask signs → content appears with tx badge
-  - Prerequisite: `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` set in `client-human/.env.local`
+- [ ] **P6-1** MCP scenario write-up — 1-pager before touching code
+  - Describe the end-to-end flow: Claude Desktop calls MCP tool → 402 triggered → USDC paid autonomously → content returned with TxHash
+  - File: `scenario.md` in repo root
 
 ---
 
 ## Backlog
 
-### Phase 5: Polish for demo
+### Phase 6: MCP server + autonomous agent
+
+- [ ] **P6-2** MCP server — `mcp-server/` package
+  - Framework: `@modelcontextprotocol/sdk` (Node.js)
+  - Tool: `get_section(articleId, sectionId)` → calls `server/` via x402 internally
+  - Wallet code: port from `client-agent/src/wallet.ts` (already works end-to-end)
+  - x402 payment happens inside the tool call — caller sees only content + TxHash
+  - Key risk: 10s facilitator lag must not block Claude Desktop visibly (investigate streaming or async approach)
+
+- [ ] **P6-3** Article metadata on section responses
+  - Extend `server/src/content/articles.ts` with lightweight metadata per section:
+    ```ts
+    metadata: {
+      author: string,
+      publishedAt: string  // ISO8601
+    }
+    ```
+  - Include in HTTP response body for paid sections
+
+- [ ] **P6-4** Claude Desktop integration test
+  - Add `mcp-server` to Claude Desktop `claude_desktop_config.json`
+  - Verify: Claude calls `get_section` → x402 payment runs autonomously → content + TxHash returned
+  - Confirm TxHash is visible on Base Sepolia Explorer
+
+- [ ] **P6-5** Risk checklist
+  - Base Sepolia availability (external dependency)
+  - CDP Facilitator RPC lag under load
+  - `.env` loading in Claude Desktop stdio process context
+
+### Phase 5: Polish (deprioritized — resume after Phase 6 demo is working)
+
+- [ ] **P4-5** Manual verification — browser UI end-to-end
+  - Open http://localhost:3000 → connect MetaMask (Base Sepolia)
+  - Click "Read" → MetaMask signs → content appears with tx badge
+  - Prerequisite: `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` set in `client-human/.env.local`
+  - *Deprioritized: focus shifted to MCP + autonomous payment flow (Phase 6)*
 
 - [ ] **P5-1** Update `README.md` with end-to-end demo steps
 

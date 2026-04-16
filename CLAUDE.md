@@ -7,11 +7,13 @@ This file is auto-loaded by Claude Code. Read it fully before writing any code.
 ## Project Overview
 
 **weipress** is a personal PoC exploring the **x402 protocol (HTTP 402 Payment Required)**
-for section-level micropayments on a fictional financial news portal.
+combined with an **MCP server**, letting AI agents autonomously pay for paywalled content
+with an on-chain record of each payment.
 
 - Blockchain: Base Sepolia (testnet only)
 - Payment token: USDC (EIP-3009 — gasless signature payments)
 - Facilitator: Coinbase Developer Platform (CDP)
+- Phase 6 goal: Claude Desktop calls `get_section` MCP tool → x402 payment runs inside the tool → content + TxHash returned
 
 ---
 
@@ -19,23 +21,30 @@ for section-level micropayments on a fictional financial news portal.
 
 ```
 weipress/
-├── CLAUDE.md           ← this file
-├── TASKS.md            ← implementation checklist (check off as you go)
-├── api-spec.md         ← endpoint contract (source of truth for interfaces)
-├── server/             ← Express + @x402/express
+├── CLAUDE.md            ← this file
+├── TASKS.md             ← implementation checklist (check off as you go)
+├── api-spec.md          ← endpoint contract (source of truth for interfaces)
+├── scenario.md          ← (to be created) MCP flow walkthrough
+├── server/              ← Express + @x402/express
 │   ├── src/
 │   │   ├── index.ts
 │   │   ├── routes/articles.ts
-│   │   ├── content/articles.ts   ← dummy article data
+│   │   ├── content/articles.ts   ← dummy article data (will add section metadata)
 │   │   └── config/x402.ts
 │   ├── package.json
 │   └── tsconfig.json
-├── client-human/       ← Next.js browser UI
+├── mcp-server/          ← (to be created) MCP server for Claude Desktop
+│   ├── src/
+│   │   ├── index.ts     ← MCP tool: get_section(articleId, sectionId)
+│   │   └── wallet.ts    ← agent wallet (autonomous EIP-3009 signing)
+│   ├── package.json
+│   └── tsconfig.json
+├── client-human/        ← Next.js browser UI (deprioritized for demo)
 │   ├── src/app/
 │   ├── src/components/
 │   ├── package.json
 │   └── tsconfig.json
-└── client-agent/       ← minimal agent payment script
+└── client-agent/        ← CLI agent payment script (reference implementation)
     ├── src/
     │   ├── agent.ts
     │   └── wallet.ts
@@ -57,6 +66,7 @@ weipress/
 | EVM library | `viem` v2.x — do NOT use ethers.js |
 | HTTP framework | Express v4.x (server only) |
 | UI framework | Next.js v14 App Router (client-human only) |
+| MCP SDK | `@modelcontextprotocol/sdk` (mcp-server only) |
 
 ---
 
@@ -84,6 +94,13 @@ RPC_URL=https://sepolia.base.org
 ```
 NEXT_PUBLIC_SERVER_URL=http://localhost:3001
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=<get from https://cloud.walletconnect.com>
+```
+
+### mcp-server/.env
+```
+SERVER_URL=http://localhost:3001
+AGENT_PRIVATE_KEY=0x<test-only wallet private key — same as client-agent or new wallet>
+RPC_URL=https://sepolia.base.org
 ```
 
 > ⚠️ Always add `.env` and `.env.local` to `.gitignore`. Never commit private keys.
